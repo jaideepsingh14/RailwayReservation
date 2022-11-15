@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Booking Agent Home</title>
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" type="text/css" href="../static/CSS/booking_agent_home.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		
+		<script type="text/javascript" src="../static/JS/Jquery.js"></script>
+		<script type="text/javascript" src="../static/JS/booking_agent_home.js"></script>
+	</head>
+	<body>
+		<div class="one">
+			<div class="onep1" id="onep1">
+				<img src="../static/IMAGES/avatar.png">
+				<div class="onep1c1" id="onep1p1">Welcome, <span id="uname">{{session["uname"]}}</span>
+					<ul class="dropdown">
+						<li><a href="{{ url_for('logout')}}"><i class="fa fa-sign-out"></i>Log out</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="two">
+			<div class="twop1">
+				<div class="twop1p1 active" id="twop1p1">Search Trains Info</div>
+				<div class="twop1p1" id="twop1p2">My Bookings</div>
+				<div class="twop1p1" id="twop1p3">Book New Ticket</div>
+			</div>
+		</div>
+		<div class="three">
+			<div class="threep1">
+				<h2>Insert the train number and/or date to search</h2>
+				<br>
+				<form action="booking_agent_show_train" method="post" id="booking_agent_show_train">
+					<div class="threep1p1">
+						4-digit Train no. <input id="train" type="text" name="trainno" size="40" placeholder="Enter Train Number">
+						<div id = "threep1p1_input_train_tooltip">The train number must be of 4 digits</div>
+					</div>
+					<div class="threep1p1">
+						Start Date of Journey <input id="doj" type="text" name="doj" size="40" placeholder="Enter Start Date of Journey" onfocus="(this.type='date')" onblur="(this.type='text')">
+					</div>
+					<div id="threep1p1btn"><input id="btnSearch" class = "invalid" type="button" name="btnSearch" value="Search" disabled></div>
+					<div id="threep1p1_btn_show_tooltip">This button is disabled because both the fields are empty now.</div>
+				</form>
+			</div>
+			<div class="threep2">
+				<table id="threep2p1">
+					<tr>
+						<th>Sl. no</th>
+						<th>Train Number</th>
+						<th>Source</th>
+						<th>Start Date of Journey</th>
+						<th>Start Time</th>
+						<th>Destination</th>
+						<!-- <th>End Date of Journey</th> -->
+						<th>End Time</th>
+						<th>#AC coaches</th>
+						<th>AC Fare</th>
+						<th>#SL coaches</th>
+						<th>SL Fare</th>
+						<th>#AC Seats Available</th>
+						<th>#SL Seats Available</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class="four">
+			<div id="fourp1">
+				<h2>All the previous bookings with passenger details.</h2>
+				<h3>NO PREVIOUS BOOKINGS AVAILABLE</h3>
+				<table id="fourp1p1">
+					<thead>
+						<tr>
+							<th rowspan="2">Sl. no</th>
+							<th rowspan="2">Train Number</th>
+							<th rowspan="2">PNR</th>
+							<th rowspan="2">Source</th>
+							<th rowspan="2">Date of Journey</th>
+							<th rowspan="2">Start Time</th>
+							<th rowspan="2">Destination</th>
+							<th rowspan="2">End Time</th>
+							<!-- <th rowspan="2">Fare</th> -->
+							<th colspan="6">Passenger Details</th>
+						</tr>
+						<tr>
+							<th>Name</th>
+							<th>Age</th>
+							<th>Gender</th>
+							<th>Coach No.</th>
+							<th>Seat No.</th>
+							<th>Berth Type</th>
+						</tr>
+					</thead>
+					<tbody style="color: black;">
+						<!-- <tr class="passrow">
+							<td rowspan="3">1.</td>
+							<td rowspan="3">1000</td>
+							<td rowspan="3">1000</td>
+							<td rowspan="3">Delhi</td>
+							<td rowspan="3">02-08-2020</td>
+							<td rowspan="3">10:00</td>
+							<td rowspan="3">Ropar</td>
+							<td rowspan="3" class="lasttd">12:00</td>
+						</tr>
+						<tr>
+							<td>hk hk</td>
+							<td>21</td>
+							<td>M</td>
+							<td>A1</td>
+							<td>3</td>
+							<td>UB</td>
+						</tr>
+						<tr>
+							<td>hk hk</td>
+							<td>23</td>
+							<td>F</td>
+							<td>A1</td>
+							<td>4</td>
+							<td>LB</td>
+						</tr> -->
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="five">
+			<form action="booking_agent_new_booking" method="post" id="booking_agent_new_booking">
+				<div id = "fivep1">
+					<h2>Enter the train no., start date of journey and select coach type</h2>
+					<table>
+						<tr>
+							<td width="19%">Enter Train No. : </td>
+							<td width="25%"><input id="trainno2" type="text" name="trainno2" size="40" placeholder="Enter Train Number" required/></td>
+							<td width="5%"><img id="trainno2img" src="../static/IMAGES/wrong.gif" alt="wrong" hidden="true"/></td>
+							<td width="1%"><span></span><span></span></td>
+							<td width="19%">Enter Start Date of journey. : </td>
+							<td width="25%"><input id="start_doj2" type="text" name="start_doj2" size="40" placeholder="Enter Start date of journey"  onfocus="(this.type='date')" onblur="(this.type='text')" required/></td>
+							<td width="5%"><img id="start_doj2img" src="../static/IMAGES/wrong.gif" alt="wrong" hidden="true"/></td>
+							<td width="1%"><span></span><span></span></td>
+						</tr>
+						<tr>
+							<td width="19%">Select Coach Type : </td>
+							<td width="25%">
+								<select id="coach" name="coach" required>
+									<option value="0">-- Choose Your Coach Type --</option>
+									<option value="A">AC</option>
+									<option value="S">Sleeper</option>
+								</select>
+							</td>
+							<td width="5%"><img id="coachimg" src="../static/IMAGES/wrong.gif" alt="wrong" hidden="true"/></td>
+							<td width="1%"><span></span><span></span></td>
+							<td id="btnNEXTtd" colspan="4">
+								<div class="btnNEXTdiv"><input class="invalid" id="btnNEXT" type="button" name="btnNEXT" value="NEXT" disabled></div>
+								<div id="btnNEXTdiv_tooltip">This button is disabled because altleast one of the fields is empty/not properly filled.</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div id = "fivep2">
+					<h2>#AC seats available:&nbsp;&nbsp;&nbsp;&nbsp;<span id="acSeats">0</span></h2>
+					<h2>#SL seats available:&nbsp;&nbsp;&nbsp;&nbsp;<span id="slSeats">0</span></h2>
+					<div id="scrollingdiv">
+						<table id="fivep2p1">
+							<thead>
+								<tr id="tableHead">
+									<th width="6%">S. No.</th>
+									<th width="24%" colspan="3">First Name</th>
+									<th width="24%" colspan="3">Last Name</th>
+									<th width="19%" colspan="3">Age</th>
+									<th width="19%" colspan="3">Gender</th>
+									<th width="8%">Total:&nbsp;&nbsp;<span id="totalPassengersAdded">0</span></th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- <tr>
+									<td width="5%">1.</td>
+									<td width="24%"><input type="text" name="fname[]"></td>
+									<td width="5%"><img src="../static/IMAGES/wrong.gif" alt="wrong" hidden="true"/></td>
+									<td width="1%"><span></span><span></span></td>
+									<td width="24%"><input type="text" name="lname[]"></td>
+									<td width="1%"><span></span><span></span></td>
+									<td width="14%"><input type="text" name="age[]"></td>
+									<td width="1%"><span></span><span></span></td>
+									<td width="19%">
+										<select name="gender[]" required>
+											<option value="0">-- Choose Gender --</option>
+											<option value="M">Male</option>
+											<option value="F">Female</option>
+											<option value="O">Other</option>
+										</select>
+									</td>
+									<td width="1%"><span></span><span></span></td>
+									<td width="10%" class="cancel"><span>X</span></td>
+								</tr> -->
+								<tr id="addRowtr">
+									<td colspan="14">
+										<div id="addRow">
+											+
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="btnSUBMITdiv"><input class="valid" id="btnBACK" type="button" name="btnBACK" value="Back"></div>
+					<div class="btnSUBMITdiv" id="btnSUBMITdiv"><input class="invalid" id="btnSUBMIT" type="button" name="btnSUBMIT" value="Book Ticket" disabled></div>
+					<div id="btnSUBMITdiv_tooltip">This button is disabled because altleast some of the fields are empty now.</div>
+				</div>
+				<div id = "fivep3">
+					<!-- <div id="fivep3c1">
+						<h4>Confirm the transaction. This page is valid for <span id="timer"></span></h4>
+					</div> -->
+					<div id="fivep3p2">
+						Confirm your payment of &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span id="finalFare">0</span> rupees
+					</div>
+					<div id="fivep3p3">
+						<input class="valid" id="btnCANCEL" type="button" name="btnCANCEL" value="Cancel Payment">
+						<input class="valid" id="btnCONFIRM" type="button" name="btnCONFIRM" value="Confirm Transaction">
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="seven">
+			<img alt="loading" src="../static/IMAGES/loading.gif">
+			<h1>PROCESSING</h1>
+		</div>
+	</body>
+</html>
